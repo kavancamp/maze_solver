@@ -1,16 +1,44 @@
-from tkinter import tk, BOTH, Canvas
+import tkinter as tk
+from tkinter import Tk, BOTH, Canvas
+import time
 
 class Window:
-    def __innit__(self, width, height, title="Maze Solver"):
-        self.root = tk.Tk()
+    def __init__(self, width=700, height=600):
+        self.root = Tk()
         self.width = width
         self.height = height 
-        self.root.title = title(title)
+        self.root.title(title="Maze Solver")
         self.is_running = False
+        self.root.geometry(f"{width}x{height}")
+        self.root.protocol("WM_DELETE_WINDOW", self.close) 
         
-        canvas = tk.Canvas(self.root, width=600, height=400, bg='white')
-        canvas.pack(anchor=tk.CENTER, expand=True)
+        self.canvas = Canvas(self.root, width=width, height=height, bg='white')
+        self.canvas.pack(fill=BOTH, expand=1)
+        
+        self.setup_ui()
+        
+    def setup_ui(self):
+        
+        label = tk.Label(self.root, text="Hello, Tkinter!")
+        label.pack(pady=10)
+
+        button = tk.Button(self.root, text="Close Program", command=self.close)
+        button.pack()
+
+        
+    def redraw(self):
+        self.root.update_idletasks()
+        self.root.update()    
     
-    
+    def wait_for_close(self):
+        self.is_running = True   
+        while self.is_running:
+            self.redraw()
+            time.sleep(0.01)
+            
     def run(self):
         self.root.mainloop()
+        
+    def close(self):
+        self.is_running = False
+        #self.root.destroy() 
